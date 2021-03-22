@@ -50,8 +50,17 @@ def registry_basic_auth_header(docker_client, registry):
     header_json = json.loads(base64.b64decode(header))
 
     # Extract username and password
-    # log.info(header_json)
-    basic_auth = f"{header_json['username']}:{header_json['password']}"
+    try:
+        username = header_json.get('username')
+    except KeyError:
+        username = header_json.get('Username')
+
+    try:
+        password = header_json['password']
+    except KeyError:
+        password = header_json['Password']
+
+    basic_auth = f"{username}:{password}"
 
     # Encode them back to base64 and as a dict
     bytes_basic_auth = basic_auth.encode("utf-8")
