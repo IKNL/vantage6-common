@@ -12,6 +12,7 @@ from docker.models.containers import Container
 
 from vantage6.common import logger_name
 from vantage6.common import ClickLogger
+from vantage6.common.globals import APPNAME
 
 log = logging.getLogger(logger_name(__name__))
 
@@ -298,3 +299,20 @@ def remove_container(container: Container, kill=False) -> None:
     except Exception as e:
         log.error(f"Failed to remove container {container.name}")
         log.debug(e)
+
+
+def get_server_config_name(container_name: str, scope: str):
+    """
+    Get the configuration name of a server from its docker container name
+
+    Docker container name of the server is formatted as
+    f"{APPNAME}-{self.name}-{self.scope}-server". This will return {self.name}
+
+    Returns
+    -------
+    str
+        A server's configuration name
+    """
+    idx_scope = container_name.rfind(scope)
+    length_app_name = len(APPNAME)
+    return container_name[length_app_name+1:idx_scope-1]
