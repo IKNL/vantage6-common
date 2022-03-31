@@ -35,7 +35,7 @@ def check_docker_running():
     """ Return True if docker engine is running"""
     try:
         docker_client.ping()
-    except Exception as e:
+    except Exception:
         log.error("Cannot reach the Docker engine! Please make sure Docker "
                   "is running.")
         log.warn("Exiting...")
@@ -132,8 +132,8 @@ def inspect_remote_image_timestamp(docker_client, image: str, log=ClickLogger):
 
     if not v1 and not v2:
         log.error(f"Could not determine version of the registry! {reg}")
-        log.error(f"Is this a Harbor registry?")
-        log.error(f"Or is the harbor server offline?")
+        log.error("Is this a Harbor registry?")
+        log.error("Or is the harbor server offline?")
         return
 
     if v1:
@@ -292,7 +292,7 @@ def remove_container(container: Container, kill=False) -> None:
     if kill:
         try:
             container.kill()
-        except Exception as e:
+        except Exception:
             pass  # allow failure here, maybe container had already exited
     try:
         container.remove()
