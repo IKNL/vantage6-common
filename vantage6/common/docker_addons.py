@@ -35,10 +35,11 @@ def check_docker_running():
     """ Return True if docker engine is running"""
     try:
         docker_client.ping()
-    except Exception:
+    except Exception as e:
         log.error("Cannot reach the Docker engine! Please make sure Docker "
                   "is running.")
         log.warn("Exiting...")
+        log.debug(e)
         exit(1)
 
 
@@ -307,6 +308,13 @@ def get_server_config_name(container_name: str, scope: str):
 
     Docker container name of the server is formatted as
     f"{APPNAME}-{self.name}-{self.scope}-server". This will return {self.name}
+
+    Parameters
+    ----------
+    container_name: str
+        Name of the docker container in which the server is running
+    scope: str
+        Scope of the server (e.g. 'system' or 'user')
 
     Returns
     -------
