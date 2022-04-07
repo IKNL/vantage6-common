@@ -5,6 +5,7 @@ import requests
 import base64
 import json
 import signal
+import pathlib
 
 from dateutil.parser import parse
 from docker.client import DockerClient
@@ -41,6 +42,11 @@ def check_docker_running():
         log.warn("Exiting...")
         log.debug(e)
         exit(1)
+
+
+def running_in_docker() -> bool:
+    """Return True if this code is executed within a Docker container."""
+    return pathlib.Path('/.dockerenv').exists()
 
 
 def registry_basic_auth_header(docker_client, registry):
